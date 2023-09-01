@@ -1,17 +1,24 @@
 import { StyleSheet, View, StatusBar,KeyboardAvoidingView } from 'react-native'
-import React, { useState } from 'react'
-
+import React, { useState, useEffect } from 'react'
 /* ThirdParty Imports */
 import { Image,Button,Input } from '@rneui/base'
 
-export default function LoginScreen() {
+
+/* files imports */
+
+import { onAuthStateChangedAuthUser, signInAuthUserWithEmailAndPassword } from '../firebase'
+
+export default function LoginScreen({ navigation }) {
   /* States */
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  /* UseEffects */
+
   /* Functions */
   const signIn = () => {
-    console.log("Login")
+    signInAuthUserWithEmailAndPassword(email, password)
+      .catch((error) => alert(error))
   }
 
 
@@ -29,11 +36,12 @@ export default function LoginScreen() {
         <Input placeholder="Password" secureTextEntry type="password" value={password} onChangeText={(text) => setPassword(text)} />
       </View>
       <Button containerStyle={styles.button} title={"Login"} onPress={signIn} />
-      <Button containerStyle={styles.button} type='outline' title={"Register"} onPress={() => console.log("Register")} />
+      <Button containerStyle={styles.button} type='outline' title={"Register"} onPress={() => navigation.navigate("Register")} />
       <View style={{ height: 50 }} />
     </KeyboardAvoidingView>
   )
 }
+
 
 const styles = StyleSheet.create({
   container: {
